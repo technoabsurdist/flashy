@@ -59,12 +59,6 @@ app.delete('/question/delete/:id', async (req, res) => {
 })
 
 
-
-
-
-
-
-
 /* PORT declared globally */ 
 app.listen(PORT, 
     () => console.log(`QA server started on port: ${PORT}`))
