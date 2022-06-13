@@ -9,6 +9,12 @@ let QA_arr = []
 
 
 
+/* helper function to show formatted output */ 
+const showFormatted = (arr, i) => {
+    console.log(` ID: ${arr[i]._id} | Q: ${arr[i].question} | A: ${arr[i].answer}\n`)
+}
+
+
 /* for DELETE endpoint */ 
 const newQAs = data => {
     QA_arr = data
@@ -20,18 +26,24 @@ const showQAs = data => {
     QA_arr.push.apply(QA_arr, data)
     console.log("\n")
     for (let i = 0; i < QA_arr.length; i++) {
-        console.log(` ID: ${QA_arr[i]._id} | Q: ${QA_arr[i].question} | A: ${QA_arr[i].answer}\n`)
+        showFormatted(QA_arr, i)
     }
 }
 
 /* create array of q&a's from server info */
 const setQAs = data => {
-    const times = 5 
+    const indexes = []
+    let times = 5 
     QA_arr.push.apply(QA_arr, data)
     const len = QA_arr.length
+    if (len < times) { times = len } // if doesn't have enough to show 5 
     for (let i = 0; i < times; i++) {
-        const randIndex = Math.random() * (len + 1)
-        console.log(QA_arr[randIndex])
+        const randIndex = Math.floor(Math.random() * (len + 1))
+        if (QA_arr.indexOf(randIndex) === -1) {
+            showFormatted(QA_arr, randIndex)
+        } else { // index not there?
+            continue
+        }
     }
 }
 
@@ -43,7 +55,7 @@ const getQAs = () => {
         .catch(err => console.error("Error: ", err))
 }
 
-const getQAsNoPrint = () => {
+const getQAsToPlay = () => {
     fetch(API_BASE + "/questions")
         .then(res => res.json())
         .then(data => setQAs(data)) // only change from getQAs
@@ -92,7 +104,7 @@ const randomly_shuffle = arr => {
 
 // =========== Functionality ===============
 const functionality = `
-== Functionality Menu == 
+== Flashy Functionality Menu by @technoabsurdist == 
 -- node app.js play : shuffles and shows 5 random cards
 -- node app.js list : lists all availables Q&As 
 -- node app.js add "<question>" "<ansewr>"  : adds new questions and answers
@@ -117,7 +129,7 @@ const main = () => {
     // else no perceived errors
     if (all_args[2] === "play") {
         // TODO:  
-        getQAsNoPrint()
+        getQAsToPlay()
     
     }
     
