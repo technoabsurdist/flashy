@@ -14,13 +14,27 @@ const showFormatted = (arr, i) => {
     console.log(` ID: ${arr[i]._id} | Q: ${arr[i].question} | A: ${arr[i].answer}\n`)
 }
 
+/* Helper function to randomly shuffle an array of objects */ 
+const randomly_shuffle = arr => {
+    const indexes = []
+    let times = 5
+    const len = arr.length 
+    if (len < times) { times = len }
+    for (let i = 0; i < times; i++) {
+        const randIndex = Math.floor(Math.random() * (len+1))
+        if (arr.indexOf(randIndex) === -1) {
+            showFormatted(arr, randIndex)
+        } else {
+            continue
+        }
+    }
+}
 
 /* for DELETE endpoint */ 
 const newQAs = data => {
     QA_arr = data
     return QA_arr
 }
-
 /* apart from setQAs also shows data formatted */
 const showQAs = data => {
     QA_arr.push.apply(QA_arr, data)
@@ -32,19 +46,8 @@ const showQAs = data => {
 
 /* create array of q&a's from server info */
 const setQAs = data => {
-    const indexes = []
-    let times = 5 
     QA_arr.push.apply(QA_arr, data)
-    const len = QA_arr.length
-    if (len < times) { times = len } // if doesn't have enough to show 5 
-    for (let i = 0; i < times; i++) {
-        const randIndex = Math.floor(Math.random() * (len + 1))
-        if (QA_arr.indexOf(randIndex) === -1) {
-            showFormatted(QA_arr, randIndex)
-        } else { // index not there?
-            continue
-        }
-    }
+    randomly_shuffle(QA_arr)
 }
 
 // call api to get current questions
@@ -90,16 +93,6 @@ const addQA = async (_question, _answer) => {
     setQAs([..._question, data]) // add question to previous question array
 }
 
-const randomly_shuffle = arr => {
-    let items = []
-    // TODO: Figure out how to shuffle array
-    for (const item of arr) {
-       items.push(item) 
-       console.log(items)
-    }
-
-    items = items.sort(() => Math.random() - 0.5) 
-}
 
 
 // =========== Functionality ===============
