@@ -3,11 +3,10 @@ import fetch from "node-fetch"
 globalThis.fetch = fetch
 
 
-const API_BASE = "http://localhost:5000"
+const API_BASE = "http://localhost:5001"
 
+// global question and answer arr imported from mongodb
 let QA_arr = []
-
-
 
 /* helper function to show formatted output */ 
 const showFormatted = (arr, i) => {
@@ -35,6 +34,7 @@ const newQAs = data => {
     QA_arr = data
     return QA_arr
 }
+
 /* apart from setQAs also shows data formatted */
 const showQAs = data => {
     QA_arr.push.apply(QA_arr, data)
@@ -58,6 +58,7 @@ const getQAs = () => {
         .catch(err => console.error("Error: ", err))
 }
 
+/* print different formatting than simply getQAs */ 
 const getQAsToPlay = () => {
     fetch(API_BASE + "/questions")
         .then(res => res.json())
@@ -90,7 +91,7 @@ const addQA = async (_question, _answer) => {
     }).then(res => res.json())
 
     // update state
-    setQAs([..._question, data]) // add question to previous question array
+    newQAs([..._question, data]) // add question to previous question array
 }
 
 
@@ -117,35 +118,37 @@ const main = () => {
     if (all_args[2] === "help") {
         console.log(functionality);
         return
-    }
 
-    // else no perceived errors
-    if (all_args[2] === "play") {
+    } else if (all_args[2] === "play") {
         // TODO:  
         getQAsToPlay()
-    
-    }
-    
-    // list all flash cards
-    if (all_args[2] === "list") {
-        getQAs() // we want to show all of the database questions
-    }
 
-    // add flash card 
-    if (all_args[2] === "add") {
+    } else if (all_args[2] === "list") {
+        getQAs() // we want to show all of the database questions
+
+    } else if (all_args[2] === "add") {
         const _question = all_args[3]
         const _answer = all_args[4]
         addQA(_question, _answer)
         console.log("Question Added")
-    }
+        return
 
-    // remove flash cards
-    if (all_args[2] === "rm") {
+    } else if (all_args[2] === "rm") {
         const id = all_args[3]
         deleteQA(id) 
         console.log(`ID ${id} deleted`)
+
+    } else {
+        console.log("Command not supported, please refer to `node app.mjs help`")
     }
 
 }
 
+
+
+
+
+
+
+// call main function (start program)
 main()
