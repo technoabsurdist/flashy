@@ -120,7 +120,6 @@ const main = () => {
         return
 
     } else if (all_args[2] === "play") {
-        // TODO:  
         getQAsToPlay()
 
     } else if (all_args[2] === "list") {

@@ -7,7 +7,7 @@ const cors = require('cors')
 const QA = require("./models/QA.cjs")
 
 /* PORT used */ 
-const PORT = 5000
+const PORT = 5001
 
 const app = express()
 app.use(express.json())
